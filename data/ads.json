@@ -1,0 +1,18 @@
+[
+  {
+    "id": "1772975554586",
+    "createdAt": "2026-03-08T13:12:34.587Z",
+    "isActive": true,
+    "title": "Dummy Ad",
+    "destinationUrl": "http://localhost:3000/process",
+    "imageUrl": "https://via.placeholder.com/800x200?text=Dummy+Ad"
+  },
+  {
+    "id": "1773421819142",
+    "createdAt": "2026-03-13T17:10:19.142Z",
+    "isActive": true,
+    "title": "Test Ad",
+    "destinationUrl": "http://google.com",
+    "imageUrl": "https://via.placeholder.com/300"
+  }
+]

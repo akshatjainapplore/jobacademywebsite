@@ -1,0 +1,23 @@
+[
+  {
+    "id": "1767539163411",
+    "submittedAt": "2026-01-04T15:06:03.411Z",
+    "name": "Akshat",
+    "email": "xyz@email.com",
+    "phone": "999988888",
+    "resume": "Cibsyktabt",
+    "experience": "",
+    "jobId": "1",
+    "status": "Interviewing"
+  },
+  {
+    "id": "1767539347576",
+    "submittedAt": "2026-01-04T15:09:07.576Z",
+    "name": "ALOK",
+    "email": "ALOK@EMAIL.COM",
+    "phone": "2222299999",
+    "resume": "DIRECTOR",
+    "experience": "25",
+    "jobId": "2"
+  }
+]
