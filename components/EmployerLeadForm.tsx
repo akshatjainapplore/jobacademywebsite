@@ -86,7 +86,6 @@ export default function EmployerLeadForm() {
                             value={formData.companyName}
                             onChange={handleChange}
                             style={{ width: '100%', padding: '1rem', borderRadius: '8px', border: '1.5px solid #E2E8F0', outline: 'none' }}
-                            required
                         />
                     </div>
                     <div>
@@ -97,7 +96,6 @@ export default function EmployerLeadForm() {
                             value={formData.contactName}
                             onChange={handleChange}
                             style={{ width: '100%', padding: '1rem', borderRadius: '8px', border: '1.5px solid #E2E8F0', outline: 'none' }}
-                            required
                         />
                     </div>
                 </div>
@@ -110,18 +108,21 @@ export default function EmployerLeadForm() {
                             value={formData.email}
                             onChange={handleChange}
                             style={{ width: '100%', padding: '1rem', borderRadius: '8px', border: '1.5px solid #E2E8F0', outline: 'none' }}
-                            required
                         />
                     </div>
                     <div>
                         <input
                             type="tel"
-                            name="phone"
-                            placeholder="Phone Number"
+                            placeholder="Phone Number (10 digits required)"
                             value={formData.phone}
-                            onChange={handleChange}
+                            onChange={(e) => {
+                                const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                                setFormData(prev => ({ ...prev, phone: val }));
+                            }}
                             style={{ width: '100%', padding: '1rem', borderRadius: '8px', border: '1.5px solid #E2E8F0', outline: 'none' }}
                             required
+                            pattern="[0-9]{10}"
+                            title="Please enter a 10-digit phone number"
                         />
                     </div>
                 </div>
@@ -133,7 +134,6 @@ export default function EmployerLeadForm() {
                         onChange={handleChange}
                         rows={4}
                         style={{ width: '100%', padding: '1rem', borderRadius: '8px', border: '1.5px solid #E2E8F0', outline: 'none', resize: 'vertical' }}
-                        required
                     />
                 </div>
 

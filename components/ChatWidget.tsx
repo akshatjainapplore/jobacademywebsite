@@ -1,19 +1,11 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-
-type Message = {
-    role: 'user' | 'assistant';
-    text: string;
-};
+import { useChat } from '@/hooks/useChat';
 
 export default function ChatWidget() {
     const [isOpen, setIsOpen] = useState(false);
-    const [messages, setMessages] = useState<Message[]>([
-        { role: 'assistant', text: 'Hello! How can I help you with your career today?' }
-    ]);
-    const [inputValue, setInputValue] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+    const { messages, inputValue, setInputValue, isLoading, handleSend } = useChat();
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
@@ -23,35 +15,6 @@ export default function ChatWidget() {
     useEffect(() => {
         scrollToBottom();
     }, [messages, isOpen]);
-
-    const handleSend = async () => {
-        if (!inputValue.trim()) return;
-
-        const userMsg = inputValue;
-        setInputValue('');
-        setMessages(prev => [...prev, { role: 'user', text: userMsg }]);
-        setIsLoading(true);
-
-        try {
-            const res = await fetch('/api/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: userMsg }),
-            });
-
-            const data = await res.json();
-
-            if (data.text) {
-                setMessages(prev => [...prev, { role: 'assistant', text: data.text }]);
-            } else if (data.error) {
-                setMessages(prev => [...prev, { role: 'assistant', text: "Sorry, something went wrong." }]);
-            }
-        } catch (error) {
-            setMessages(prev => [...prev, { role: 'assistant', text: "I'm having trouble connecting. Please check your internet." }]);
-        } finally {
-            setIsLoading(false);
-        }
-    };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter') {
@@ -189,32 +152,8 @@ export default function ChatWidget() {
                                     key={idx}
                                     onClick={() => {
                                         setInputValue(action);
-                                        // We need to trigger send immediately, but handleSend uses current state of inputValue.
-                                        // Better to refactor handleSend or just call logic directly.
-                                        // Let's modify handleSend to accept an optional argument or just do this manually:
-
-                                        const userMsg = action;
-                                        setMessages(prev => [...prev, { role: 'user', text: userMsg }]);
-                                        setIsLoading(true);
-
-                                        // Mimic the API call logic
-                                        fetch('/api/chat', {
-                                            method: 'POST',
-                                            headers: { 'Content-Type': 'application/json' },
-                                            body: JSON.stringify({ message: userMsg }),
-                                        })
-                                            .then(res => res.json())
-                                            .then(data => {
-                                                if (data.text) {
-                                                    setMessages(prev => [...prev, { role: 'assistant', text: data.text }]);
-                                                } else {
-                                                    setMessages(prev => [...prev, { role: 'assistant', text: "Sorry, something went wrong." }]);
-                                                }
-                                            })
-                                            .catch(() => {
-                                                setMessages(prev => [...prev, { role: 'assistant', text: "I'm having trouble connecting." }]);
-                                            })
-                                            .finally(() => setIsLoading(false));
+                                        // We need to trigger send immediately
+                                        handleSend(action);
                                     }}
                                     style={{
                                         backgroundColor: 'white',
@@ -281,7 +220,7 @@ export default function ChatWidget() {
                                 }}
                             />
                             <button
-                                onClick={handleSend}
+                                onClick={() => handleSend()}
                                 disabled={isLoading || !inputValue.trim()}
                                 style={{
                                     backgroundColor: inputValue.trim() ? '#1F4E8C' : '#e2e8f0',

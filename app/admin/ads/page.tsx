@@ -54,14 +54,25 @@ export default function AdsManagement() {
         }
     };
 
+    const formatImageUrl = (url: string) => {
+        if (url.includes('drive.google.com')) {
+            const match = url.match(/\/d\/(.+?)\/(view|edit)/) || url.match(/id=(.+?)(&|$)/);
+            if (match && match[1]) {
+                return `https://drive.google.com/uc?export=download&id=${match[1]}`;
+            }
+        }
+        return url;
+    };
+
     const handleCreateAd = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
+        const finalImageUrl = formatImageUrl(imageUrl);
         try {
             const res = await fetch('/api/ads', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, destinationUrl, imageUrl })
+                body: JSON.stringify({ title, destinationUrl, imageUrl: finalImageUrl })
             });
             if (res.ok) {
                 const { ad } = await res.json();
@@ -115,15 +126,53 @@ export default function AdsManagement() {
                             />
                         </div>
                         <div>
-                            <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.5rem' }}>Banner Image URL</label>
-                            <input
-                                type="url"
-                                value={imageUrl}
-                                onChange={e => setImageUrl(e.target.value)}
-                                placeholder="https://example.com/image.png"
-                                style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none' }}
-                                required
-                            />
+                            <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.5rem' }}>Banner Image</label>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={async (e) => {
+                                        const file = e.target.files?.[0];
+                                        if (!file) return;
+                                        
+                                        const formData = new FormData();
+                                        formData.append('file', file);
+                                        
+                                        setIsSubmitting(true);
+                                        try {
+                                            const res = await fetch('/api/upload', {
+                                                method: 'POST',
+                                                body: formData
+                                            });
+                                            const data = await res.json();
+                                            if (data.url) {
+                                                setImageUrl(data.url);
+                                            }
+                                        } catch (err) {
+                                            console.error("Upload failed", err);
+                                            alert("Upload failed.");
+                                        } finally {
+                                            setIsSubmitting(false);
+                                        }
+                                    }}
+                                    style={{ fontSize: '0.85rem' }}
+                                />
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                    <div style={{ flex: 1, height: '1.5px', backgroundColor: '#F1F5F9' }}></div>
+                                    <span style={{ fontSize: '0.7rem', color: '#94A3B8', fontWeight: 700 }}>OR USE URL</span>
+                                    <div style={{ flex: 1, height: '1.5px', backgroundColor: '#F1F5F9' }}></div>
+                                </div>
+                                <input
+                                    type="text"
+                                    value={imageUrl}
+                                    onChange={e => setImageUrl(e.target.value)}
+                                    placeholder="https://example.com/image.png or /uploads/..."
+                                    style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none' }}
+                                />
+                            </div>
+                            <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '0.4rem' }}>
+                                Tip: Uploading directly is recommended for reliability.
+                            </p>
                         </div>
                         <button type="submit" disabled={isSubmitting} className="btn btn-primary btn-sharp" style={{ marginTop: '1rem' }}>
                             {isSubmitting ? 'Creating...' : 'Publish Ad'}

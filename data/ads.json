@@ -2,7 +2,7 @@
   {
     "id": "1772975554586",
     "createdAt": "2026-03-08T13:12:34.587Z",
-    "isActive": true,
+    "isActive": false,
     "title": "Dummy Ad",
     "destinationUrl": "http://localhost:3000/process",
     "imageUrl": "https://via.placeholder.com/800x200?text=Dummy+Ad"
@@ -10,9 +10,25 @@
   {
     "id": "1773421819142",
     "createdAt": "2026-03-13T17:10:19.142Z",
-    "isActive": true,
+    "isActive": false,
     "title": "Test Ad",
     "destinationUrl": "http://google.com",
     "imageUrl": "https://via.placeholder.com/300"
+  },
+  {
+    "id": "1774157726894",
+    "createdAt": "2026-03-22T05:35:26.895Z",
+    "isActive": false,
+    "title": "Job Academy Ad",
+    "destinationUrl": "https://www.justdial.com/Delhi/Job-Academy-Near-Allahabad-Bank-Yamuna-Vihar/011PXX11-XX11-190118155158-A1L9_BZDET",
+    "imageUrl": "https://drive.google.com/uc?export=download&id=19egN7LIcg9hAeqvl8iaCo7n5DMaHFTYm"
+  },
+  {
+    "id": "1774158204268",
+    "createdAt": "2026-03-22T05:43:24.268Z",
+    "isActive": true,
+    "title": "Job Academy Advert",
+    "destinationUrl": "https://www.justdial.com/Delhi/Job-Academy-Near-Allahabad-Bank-Yamuna-Vihar/011PXX11-XX11-190118155158-A1L9_BZDET",
+    "imageUrl": "/uploads/1774158187173-WhatsApp-Image-2026-02-21-at-08.03.03.jpeg"
   }
 ]
