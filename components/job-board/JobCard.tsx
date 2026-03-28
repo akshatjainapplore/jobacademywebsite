@@ -50,8 +50,8 @@ export function JobCard({ job, onQuickView }: { job: any, onQuickView: (job: any
                 </div>
 
                 {job.salary && (
-                    <div style={{ marginTop: '0.75rem', fontSize: '1.1rem', fontWeight: 700, color: 'black' }}>
-                        ₹{job.salary} <span style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>p.a.</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'black', fontWeight: 700, fontSize: '1.1rem' }}>
+                        {job.salary}
                     </div>
                 )}
             </div>

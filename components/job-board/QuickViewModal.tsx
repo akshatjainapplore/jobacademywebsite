@@ -71,8 +71,8 @@ export function QuickViewModal({ job, isOpen, onClose }: { job: any, isOpen: boo
                         <span style={{ backgroundColor: '#EEF2FF', color: '#4F46E5', padding: '6px 12px', borderRadius: '20px', fontSize: '0.9rem', fontWeight: 600 }}>{job.type}</span>
                     </div>
                     {job.salary && (
-                        <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'black', marginBottom: '1rem' }}>
-                            ₹{job.salary} <span style={{ fontSize: '1rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>p.a.</span>
+                        <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'black' }}>
+                            {job.salary}
                         </div>
                     )}
                 </div>

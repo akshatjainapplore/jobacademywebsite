@@ -24,9 +24,9 @@ export default function Header() {
                     <Link href="/" style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)' }}>Home</Link>
                     <Link href="/process" style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)' }}>Our Process</Link>
                     <Link href="/careers" style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)' }}>Careers</Link>
-
-
-                </nav>
+                    <div style={{ width: '1px', height: '24px', background: 'var(--color-border-glass)' }}></div>
+                    <Link href="/login" className="btn btn-sharp btn-outline" style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem' }}>Employer Login</Link>
+                    <Link href="/login" className="btn btn-sharp btn-primary" style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem' }}>Candidate Login</Link>                </nav>
             </div>
         </header>
     );

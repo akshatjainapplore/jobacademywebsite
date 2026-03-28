@@ -1,11 +1,12 @@
-import { getJobById, getActiveJobs } from '@/lib/data';
+import { getJobById, searchJobs } from '@/services/job.service';
 import ApplicationForm from '@/components/ApplicationForm';
 import Link from 'next/link';
 
 export default async function JobDetailPage(props: { params: Promise<{ id: string }> }) {
     const params = await props.params;
-    const job = getJobById(params.id);
-    const otherJobs = getActiveJobs().filter((j: any) => j.id !== params.id).slice(0, 4);
+    const job = await getJobById(params.id);
+    const allJobs = await searchJobs({});
+    const otherJobs = allJobs.filter((j: any) => j.id !== params.id).slice(0, 4);
 
     if (!job) {
         return (
@@ -70,20 +71,20 @@ export default async function JobDetailPage(props: { params: Promise<{ id: strin
 
                             <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '1.5rem', alignItems: 'center' }}>
                                 <span style={{ backgroundColor: '#F1F5F9', color: '#475569', padding: '8px 16px', borderRadius: '20px', fontSize: '1rem', fontWeight: 600 }}>{job.location}</span>
-                                <span style={{ backgroundColor: '#EEF2FF', color: '#4F46E5', padding: '8px 16px', borderRadius: '20px', fontSize: '1rem', fontWeight: 600 }}>{job.type}</span>
+                                <span style={{ backgroundColor: '#EEF2FF', color: '#4F46E5', padding: '8px 16px', borderRadius: '20px', fontSize: '1rem', fontWeight: 600 }}>{job.jobType}</span>
                                 <span style={{ backgroundColor: '#F3F4F6', color: '#374151', padding: '8px 16px', borderRadius: '20px', fontSize: '1rem', fontWeight: 600 }}>6 - 11 years</span>
                             </div>
 
-                            {job.salary && (
-                                <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'black', marginBottom: '2.5rem' }}>
-                                    ₹{job.salary} <span style={{ fontSize: '1.1rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>p.a.</span>
+                            {job.salaryMax && (
+                                <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'black', marginBottom: '2.5rem' }}>
+                                    {(job.salaryMin && job.salaryMax) ? `${job.salaryMin / 100000} - ${job.salaryMax / 100000} LPA` : (job.salaryMax ? `${job.salaryMax / 100000} LPA` : 'Not Disclosed')}
                                 </div>
                             )}
 
                             <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <div style={{ color: 'var(--color-text-muted)', fontSize: '0.95rem' }}>
-                                    Posted: <span style={{ fontWeight: 800, color: 'var(--color-text)' }}>{formatDate(job.postedAt)}</span> |
-                                    Applicants: <span style={{ fontWeight: 800, color: 'var(--color-text)', marginLeft: '0.25rem' }}>100+</span>
+                                    Posted: <span style={{ fontWeight: 800, color: 'var(--color-text)' }}>{formatDate(job.createdAt.toISOString())}</span> |
+                                    Applicants: <span style={{ fontWeight: 800, color: 'var(--color-text)', marginLeft: '0.25rem' }}>{job.applications ? job.applications.length : 0}</span>
                                 </div>
                                 <div style={{ display: 'flex', gap: '1.5rem' }}>
                                     <button className="btn btn-glass btn-pill" style={{ padding: '0.8rem 2.5rem' }}>Save Job</button>
@@ -142,13 +143,13 @@ export default async function JobDetailPage(props: { params: Promise<{ id: strin
                                             </div>
                                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1rem' }}>
                                                 <span style={{ backgroundColor: '#F1F5F9', color: '#475569', padding: '4px 10px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 600 }}>{otherJob.location}</span>
-                                                <span style={{ backgroundColor: '#EEF2FF', color: '#4F46E5', padding: '4px 10px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 600 }}>{otherJob.type}</span>
+                                                <span style={{ backgroundColor: '#EEF2FF', color: '#4F46E5', padding: '4px 10px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 600 }}>{otherJob.jobType}</span>
                                             </div>
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.8rem', color: '#64748b' }}>
-                                                {otherJob.salary && (
-                                                    <span style={{ fontWeight: 800, color: 'black', fontSize: '0.9rem' }}>₹{otherJob.salary}</span>
+                                                {otherJob.salaryMax && (
+                                                    <span style={{ fontWeight: 800, color: 'black', fontSize: '0.9rem' }}>{(otherJob.salaryMin && otherJob.salaryMax) ? `${otherJob.salaryMin / 100000} - ${otherJob.salaryMax / 100000} LPA` : (otherJob.salaryMax ? `${otherJob.salaryMax / 100000} LPA` : 'Not Disclosed')}</span>
                                                 )}
-                                                <span style={{ marginLeft: 'auto' }}>{formatDate(otherJob.postedAt)}</span>
+                                                <span style={{ marginLeft: 'auto' }}>{formatDate(otherJob.createdAt.toISOString())}</span>
                                             </div>
                                         </div>
                                     </Link>
